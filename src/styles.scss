@@ -1,0 +1,59 @@
+/* ── Reset ───────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── Variables de tema ───────────────────────────────────── */
+:root {
+  --accent:       #1D9E75;
+  --accent-dark:  #157a5a;
+
+  /* Fondo y superficies */
+  --bg:       #F5F6F8;
+  --card-bg:  #FFFFFF;
+  --surface:  #EDEEF1;
+  --surface2: #E2E4E8;
+
+  /* Texto */
+  --text-primary:   #111418;
+  --text-muted:     #6B7280;
+
+  /* Bordes */
+  --border: #E2E4E8;
+
+  /* Tipografía */
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:       #0F1117;
+    --card-bg:  #1A1D26;
+    --surface:  #22263A;
+    --surface2: #2A2F42;
+    --text-primary:  #F0F2F8;
+    --text-muted:    #8891A8;
+    --border:        #2A2F42;
+  }
+}
+
+/* ── Base ────────────────────────────────────────────────── */
+html, body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text-primary);
+  font-family: var(--font);
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Evitar tap-highlight en móvil */
+* { -webkit-tap-highlight-color: transparent; }
+
+input, textarea, select, button {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+/* Scrollbar delgado */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }

@@ -1,0 +1,58 @@
+<div class="card" [class.expanded]="expanded()" [class.compra]="esCompra" [class.venta]="!esCompra" (click)="toggle()">
+  <div class="card-head">
+    <div class="simbolo-badge" [class.badge-compra]="esCompra" [class.badge-venta]="!esCompra">
+      {{ movimiento.simbolo }}
+    </div>
+    <div class="card-info">
+      <div class="nombre">
+        {{ movimiento.nombre }}
+        <span class="orden-tag" [class.tag-compra]="esCompra" [class.tag-venta]="!esCompra">
+          {{ movimiento.orden }}
+        </span>
+      </div>
+      <div class="sub">{{ tipoLabel }} · {{ fechaFormateada }}</div>
+    </div>
+    <div class="card-valores">
+      <div class="valor-usd">{{ currency.formatUsd(movimiento.valor_usd) }}</div>
+      <div class="valor-cop">{{ currency.formatCop(movimiento.valor_cop) }}</div>
+    </div>
+    <div class="chevron" [class.open]="expanded()">▼</div>
+  </div>
+
+  <div class="card-detail" *ngIf="expanded()">
+    <div class="detail-grid">
+      <div class="detail-item">
+        <span class="dl">Símbolo</span>
+        <span class="dv">{{ movimiento.simbolo }}</span>
+      </div>
+      <div class="detail-item">
+        <span class="dl">Tipo</span>
+        <span class="dv">{{ tipoLabel }}</span>
+      </div>
+      <div class="detail-item">
+        <span class="dl">Valor USD</span>
+        <span class="dv">{{ currency.formatUsd(movimiento.valor_usd) }}</span>
+      </div>
+      <div class="detail-item">
+        <span class="dl">Valor COP</span>
+        <span class="dv">{{ currency.formatCop(movimiento.valor_cop) }}</span>
+      </div>
+      <div class="detail-item">
+        <span class="dl">TRM usada</span>
+        <span class="dv">{{ currency.formatCop(movimiento.trm) }}</span>
+      </div>
+      <div class="detail-item">
+        <span class="dl">Fecha</span>
+        <span class="dv">{{ fechaFormateada }}</span>
+      </div>
+    </div>
+    <div class="detail-item full" *ngIf="movimiento.notas">
+      <span class="dl">Notas</span>
+      <span class="dv">{{ movimiento.notas }}</span>
+    </div>
+    <div class="card-actions" (click)="$event.stopPropagation()">
+      <button class="btn-edit" (click)="edit($event)">✏ Editar</button>
+      <button class="btn-delete" (click)="delete($event)">✕ Eliminar</button>
+    </div>
+  </div>
+</div>

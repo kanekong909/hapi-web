@@ -1,0 +1,84 @@
+<div class="page">
+  <!-- Header -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <h1>Hapi <span class="accent">Tracker</span></h1>
+      <div class="trm-badge" *ngIf="currency.trmLoaded()">
+        TRM {{ currency.formatCop(currency.trm()) }}
+      </div>
+    </div>
+    <button class="btn-nuevo" (click)="nuevo()">+ Nuevo</button>
+  </header>
+
+  <!-- Stats -->
+  <div class="stats-row" *ngIf="stats()">
+    <div class="stat-card">
+      <span class="stat-label">Invertido</span>
+      <span class="stat-value">{{ currency.formatUsd(stats()!.invertido_usd) }}</span>
+      <span class="stat-sub">{{ currency.formatCop(stats()!.invertido_cop) }}</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-label">Vendido</span>
+      <span class="stat-value">{{ currency.formatUsd(stats()!.vendido_usd) }}</span>
+      <span class="stat-sub">{{ currency.formatCop(stats()!.vendido_cop) }}</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-label">Movimientos</span>
+      <span class="stat-value">{{ stats()!.total_movimientos }}</span>
+      <span class="stat-sub">{{ stats()!.total_compras }} compras · {{ stats()!.total_ventas }} ventas</span>
+    </div>
+  </div>
+
+  <!-- Búsqueda -->
+  <div class="search-wrap">
+    <input
+      class="search-input"
+      type="text"
+      placeholder="Buscar por símbolo (AAPL, BTC…)"
+      [value]="busqueda()"
+      (input)="onBusqueda($any($event.target).value)"
+    />
+  </div>
+
+  <!-- Filtros -->
+  <div class="filtros">
+    <button class="chip" [class.active]="filtroOrden() === 'COMPRA'" (click)="setFiltroOrden('COMPRA')">Compras</button>
+    <button class="chip" [class.active]="filtroOrden() === 'VENTA'"  (click)="setFiltroOrden('VENTA')">Ventas</button>
+    <button class="chip" [class.active]="filtroTipo() === 'ACCION'"  (click)="setFiltroTipo('ACCION')">Acciones</button>
+    <button class="chip" [class.active]="filtroTipo() === 'CRIPTO'"  (click)="setFiltroTipo('CRIPTO')">Cripto</button>
+    <button class="chip" [class.active]="filtroTipo() === 'ETF'"     (click)="setFiltroTipo('ETF')">ETFs</button>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading" *ngIf="loading()">
+    <div class="spinner"></div>
+    <p>Cargando...</p>
+  </div>
+
+  <!-- Error -->
+  <div class="error-msg" *ngIf="error() && !loading()">
+    {{ error() }}
+    <button (click)="cargar()">Reintentar</button>
+  </div>
+
+  <!-- Cards -->
+  <div class="cards-list" *ngIf="!loading() && !error()">
+    <div class="empty" *ngIf="movimientos().length === 0">
+      <p>No hay movimientos registrados.</p>
+      <button class="btn-nuevo" (click)="nuevo()">+ Registrar primero</button>
+    </div>
+
+    <app-card-movimiento
+      *ngFor="let m of movimientos()"
+      [movimiento]="m"
+      (deleted)="onDeleted($event)"
+    />
+
+    <!-- Paginación -->
+    <div class="pagination" *ngIf="totalPages() > 1">
+      <button (click)="paginaAnterior()" [disabled]="currentPage() === 1">← Anterior</button>
+      <span>{{ currentPage() }} / {{ totalPages() }}</span>
+      <button (click)="paginaSiguiente()" [disabled]="currentPage() === totalPages()">Siguiente →</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,107 @@
+<div class="form-page">
+  <header class="form-header">
+    <button class="btn-back" (click)="cancelar()">← Volver</button>
+    <h2>{{ editId() ? 'Editar movimiento' : 'Nuevo movimiento' }}</h2>
+  </header>
+
+  <div class="form-body">
+
+    <!-- Orden -->
+    <div class="field">
+      <label>Orden *</label>
+      <div class="toggle-group">
+        <button class="toggle-btn" [class.active-compra]="form.orden === 'COMPRA'" (click)="setOrden('COMPRA')">
+          Compra
+        </button>
+        <button class="toggle-btn" [class.active-venta]="form.orden === 'VENTA'" (click)="setOrden('VENTA')">
+          Venta
+        </button>
+      </div>
+    </div>
+
+    <!-- Nombre -->
+    <div class="field">
+      <label>Nombre del activo *</label>
+      <input type="text" [(ngModel)]="form.nombre" placeholder="Ej: Apple Inc." />
+    </div>
+
+    <!-- Símbolo -->
+    <div class="field">
+      <label>Símbolo / Abreviatura *</label>
+      <input type="text" [(ngModel)]="form.simbolo" placeholder="Ej: AAPL" style="text-transform: uppercase" />
+    </div>
+
+    <!-- Tipo -->
+    <div class="field">
+      <label>Tipo de activo *</label>
+      <div class="toggle-group three">
+        <button class="toggle-btn" [class.active-tipo]="form.tipo === 'ACCION'" (click)="setTipo('ACCION')">Acción</button>
+        <button class="toggle-btn" [class.active-tipo]="form.tipo === 'CRIPTO'"  (click)="setTipo('CRIPTO')">Cripto</button>
+        <button class="toggle-btn" [class.active-tipo]="form.tipo === 'ETF'"     (click)="setTipo('ETF')">ETF</button>
+      </div>
+    </div>
+
+    <!-- TRM -->
+    <div class="field">
+      <label>
+        TRM *
+        <span class="trm-hint" *ngIf="currency.trmLoaded()">
+          (automática: {{ currency.formatCop(currency.trm()) }})
+        </span>
+      </label>
+      <input type="number" [(ngModel)]="form.trm" placeholder="Ej: 4150" min="1" />
+    </div>
+
+    <!-- Valores -->
+    <div class="field">
+      <label>Valor *</label>
+      <div class="currency-row">
+        <div class="currency-input">
+          <span class="currency-label">USD</span>
+          <input
+            type="number"
+            [(ngModel)]="form.valor_usd"
+            (ngModelChange)="onUsdChange()"
+            placeholder="0.00"
+            min="0"
+            step="0.01"
+          />
+        </div>
+        <div class="currency-input">
+          <span class="currency-label">COP</span>
+          <input
+            type="number"
+            [(ngModel)]="form.valor_cop"
+            (ngModelChange)="onCopChange()"
+            placeholder="0"
+            min="0"
+          />
+        </div>
+      </div>
+      <p class="field-hint">Ingresa en cualquiera de las dos — se convierte automáticamente</p>
+    </div>
+
+    <!-- Fecha -->
+    <div class="field">
+      <label>Fecha *</label>
+      <input type="date" [(ngModel)]="form.fecha" />
+    </div>
+
+    <!-- Notas -->
+    <div class="field">
+      <label>Notas <span class="optional">(opcional)</span></label>
+      <textarea [(ngModel)]="form.notas" placeholder="Ej: Compra por DCA mensual..." rows="3"></textarea>
+    </div>
+
+    <!-- Error -->
+    <div class="form-error" *ngIf="error()">{{ error() }}</div>
+
+    <!-- Acciones -->
+    <div class="form-actions">
+      <button class="btn-cancel" (click)="cancelar()">Cancelar</button>
+      <button class="btn-save" (click)="guardar()" [disabled]="saving()">
+        {{ saving() ? 'Guardando…' : (editId() ? 'Actualizar' : 'Guardar') }}
+      </button>
+    </div>
+  </div>
+</div>
