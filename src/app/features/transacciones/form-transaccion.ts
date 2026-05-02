@@ -22,7 +22,7 @@ const formVacio = (): TransaccionForm => ({
   selector: 'app-form-transaccion',
   imports: [CommonModule],
   templateUrl: './form-transaccion.html',
-  styleUrl: './form-transaccion.scss'
+  styleUrl: './../form/form.scss'
 })
 export class FormTransaccionComponent implements OnInit {
   editId = signal<number | null>(null);
