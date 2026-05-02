@@ -50,5 +50,14 @@ export class PnlComponent implements OnInit {
     return new Date(y, m - 1, d).toLocaleDateString('es-CO', { day: '2-digit', month: 'short', year: 'numeric' });
   }
 
+  ordenarMovimientos(movs: any[]) {
+    return [...movs].sort((a, b) => {
+      const fechaA = new Date(`${a.fecha} ${a.hora || '00:00:00'}`).getTime();
+      const fechaB = new Date(`${b.fecha} ${b.hora || '00:00:00'}`).getTime();
+
+      return fechaB - fechaA; // más nuevos primero
+    });
+  }
+
   volver() { this.router.navigate(['/movimientos']); }
 }

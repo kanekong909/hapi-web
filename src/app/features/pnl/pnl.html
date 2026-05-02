@@ -56,7 +56,7 @@
         </div>
 
         <div class="historial-titulo">Historial de movimientos</div>
-        <div class="historial-item" *ngFor="let m of a.movimientos">
+        <div class="historial-item" *ngFor="let m of ordenarMovimientos(a.movimientos)">
           <span class="hist-icono">{{ m.orden === 'COMPRA' ? '📈' : '📉' }}</span>
           <span class="hist-fecha">{{ fechaFormateada(m.fecha) }}</span>
           <span class="hist-orden" [class.compra]="m.orden === 'COMPRA'" [class.venta]="m.orden === 'VENTA'">{{ m.orden }}</span>
