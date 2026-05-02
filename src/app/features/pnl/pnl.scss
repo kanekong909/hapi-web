@@ -36,11 +36,11 @@
   margin-bottom: 20px;
   text-align: center;
 
-  &.positivo { background: linear-gradient(135deg, #e1f5ee, #c8edd9); }
+  &.positivo { background: linear-gradient(135deg, #e1f5e6, #c8edd9); }
   &.negativo { background: linear-gradient(135deg, #faece7, #f5d0c5); }
 
   .rg-label { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
-  .rg-valor { font-size: 28px; font-weight: 700; color: var(--text-primary); }
+  .rg-valor { font-size: 28px; font-weight: 700; color: black; }
   .rg-cop   { font-size: 14px; color: var(--text-muted); margin-top: 4px; }
   .rg-pills { display: flex; justify-content: center; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
 }
