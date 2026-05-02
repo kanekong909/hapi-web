@@ -168,3 +168,57 @@
     color: #fff;
   }
 }
+
+.autocomplete-wrap {
+  position: relative;
+}
+
+.sugerencias {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: var(--card-bg);
+  border: 1px solid var(--accent);
+  border-radius: 12px;
+  overflow: hidden;
+  z-index: 100;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+}
+
+.sugerencia-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 14px;
+  cursor: pointer;
+  transition: background 0.1s;
+
+  &:not(:last-child) { border-bottom: 1px solid var(--border); }
+  &:active { background: var(--surface); }
+
+  .sug-simbolo {
+    font-size: 12px;
+    font-weight: 700;
+    background: var(--surface2);
+    border-radius: 6px;
+    padding: 2px 7px;
+    color: var(--text-primary);
+    flex-shrink: 0;
+  }
+
+  .sug-nombre {
+    font-size: 14px;
+    color: var(--text-primary);
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .sug-tipo {
+    font-size: 11px;
+    color: var(--text-muted);
+    flex-shrink: 0;
+  }
+}

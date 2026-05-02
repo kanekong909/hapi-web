@@ -15,9 +15,15 @@ const formVacio = (): MovimientoForm => ({
   valor_cop: 0,
   trm: 0,
   fecha: new Date().toISOString().split('T')[0],
-  notas: '',
   hora: '00:00:00',
+  notas: '',
 });
+
+interface ActivoSugerido {
+  nombre: string;
+  simbolo: string;
+  tipo: TipoActivo;
+}
 
 @Component({
   selector: 'app-form',
@@ -31,6 +37,11 @@ export class FormComponent implements OnInit {
   error = signal<string | null>(null);
   form = signal<MovimientoForm>(formVacio());
 
+  // Autocomplete
+  activos = signal<ActivoSugerido[]>([]);
+  sugerencias = signal<ActivoSugerido[]>([]);
+  mostrarSugerencias = signal(false);
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -39,17 +50,23 @@ export class FormComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // Setear TRM
-    const setTrm = () => {
-      this.form.update(f => ({ ...f, trm: this.currency.trm() }));
-    };
-    if (this.currency.trmLoaded()) {
-      setTrm();
-    } else {
+    const setTrm = () => this.form.update(f => ({ ...f, trm: this.currency.trm() }));
+    if (this.currency.trmLoaded()) setTrm();
+    else {
       const interval = setInterval(() => {
         if (this.currency.trmLoaded()) { setTrm(); clearInterval(interval); }
       }, 300);
     }
+
+    // Cargar activos únicos ya guardados
+    this.svc.getPorActivo().subscribe(data => {
+      const unicos = data.map((a: any) => ({
+        nombre: a.nombre,
+        simbolo: a.simbolo,
+        tipo: a.tipo as TipoActivo,
+      }));
+      this.activos.set(unicos);
+    });
 
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
@@ -64,14 +81,47 @@ export class FormComponent implements OnInit {
           valor_cop: Number(m.valor_cop),
           trm: Number(m.trm),
           fecha: String(m.fecha).substring(0, 10),
+          hora: m.hora ?? '00:00:00',
           notas: m.notas ?? '',
-          hora: m.hora ?? '00:00:00',   // ← agrega esta línea
         });
       });
     }
   }
 
   get f() { return this.form(); }
+
+  // Autocomplete: filtrar mientras escribe
+  onNombreInput(val: string) {
+    this.form.update(f => ({ ...f, nombre: val }));
+    if (val.length < 1) {
+      this.sugerencias.set([]);
+      this.mostrarSugerencias.set(false);
+      return;
+    }
+    const texto = val.toLowerCase();
+    const filtrados = this.activos().filter(a =>
+      a.nombre.toLowerCase().includes(texto) ||
+      a.simbolo.toLowerCase().includes(texto)
+    );
+    this.sugerencias.set(filtrados);
+    this.mostrarSugerencias.set(filtrados.length > 0);
+  }
+
+  seleccionarActivo(activo: ActivoSugerido) {
+    this.form.update(f => ({
+      ...f,
+      nombre: activo.nombre,
+      simbolo: activo.simbolo,
+      tipo: activo.tipo,
+    }));
+    this.sugerencias.set([]);
+    this.mostrarSugerencias.set(false);
+  }
+
+  cerrarSugerencias() {
+    // Delay para que el click en la sugerencia alcance a ejecutarse
+    setTimeout(() => this.mostrarSugerencias.set(false), 150);
+  }
 
   onUsdChange(val: number) {
     this.form.update(f => ({ ...f, valor_usd: val, valor_cop: Math.round(val * f.trm) }));
@@ -81,7 +131,7 @@ export class FormComponent implements OnInit {
     this.form.update(f => ({ ...f, valor_cop: val, valor_usd: parseFloat((val / f.trm).toFixed(2)) }));
   }
 
-  setOrden(orden: Orden) { this.form.update(f => ({ ...f, orden })); }
+  setOrden(orden: Orden)    { this.form.update(f => ({ ...f, orden })); }
   setTipo(tipo: TipoActivo) { this.form.update(f => ({ ...f, tipo })); }
 
   setField(key: keyof MovimientoForm, val: any) {

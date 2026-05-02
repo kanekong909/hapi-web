@@ -9,27 +9,39 @@
     <div class="field">
       <label>Orden *</label>
       <div class="toggle-group">
-        <button class="toggle-btn" [class.active-compra]="f.orden === 'COMPRA'" (click)="setOrden('COMPRA')">Compra</button>
-        <button class="toggle-btn" [class.active-venta]="f.orden === 'VENTA'"   (click)="setOrden('VENTA')">Venta</button>
+        <button class="toggle-btn" [class.active-compra]="f.orden === 'COMPRA'"
+          (click)="setOrden('COMPRA')">Compra</button>
+        <button class="toggle-btn" [class.active-venta]="f.orden === 'VENTA'" (click)="setOrden('VENTA')">Venta</button>
       </div>
     </div>
 
     <div class="field">
       <label>Nombre del activo *</label>
-      <input type="text" [value]="f.nombre" (input)="setField('nombre', $any($event.target).value)" placeholder="Ej: Apple Inc." />
+      <div class="autocomplete-wrap">
+        <input type="text" [value]="f.nombre" (input)="onNombreInput($any($event.target).value)"
+          (blur)="cerrarSugerencias()" placeholder="Ej: Apple Inc. o escribe AAPL" />
+        <div class="sugerencias" *ngIf="mostrarSugerencias()">
+          <div class="sugerencia-item" *ngFor="let a of sugerencias()" (click)="seleccionarActivo(a)">
+            <span class="sug-simbolo">{{ a.simbolo }}</span>
+            <span class="sug-nombre">{{ a.nombre }}</span>
+            <span class="sug-tipo">{{ a.tipo }}</span>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="field">
       <label>Símbolo / Abreviatura *</label>
-      <input type="text" [value]="f.simbolo" (input)="setField('simbolo', $any($event.target).value)" placeholder="Ej: AAPL" style="text-transform: uppercase" />
+      <input type="text" [value]="f.simbolo" (input)="setField('simbolo', $any($event.target).value)"
+        placeholder="Ej: AAPL" style="text-transform: uppercase" />
     </div>
 
     <div class="field">
       <label>Tipo de activo *</label>
       <div class="toggle-group three">
         <button class="toggle-btn" [class.active-tipo]="f.tipo === 'ACCION'" (click)="setTipo('ACCION')">Acción</button>
-        <button class="toggle-btn" [class.active-tipo]="f.tipo === 'CRIPTO'"  (click)="setTipo('CRIPTO')">Cripto</button>
-        <button class="toggle-btn" [class.active-tipo]="f.tipo === 'ETF'"     (click)="setTipo('ETF')">ETF</button>
+        <button class="toggle-btn" [class.active-tipo]="f.tipo === 'CRIPTO'" (click)="setTipo('CRIPTO')">Cripto</button>
+        <button class="toggle-btn" [class.active-tipo]="f.tipo === 'ETF'" (click)="setTipo('ETF')">ETF</button>
       </div>
     </div>
 
@@ -40,7 +52,8 @@
           (automática: {{ currency.formatCop(currency.trm()) }})
         </span>
       </label>
-      <input type="number" [value]="f.trm" (input)="setField('trm', +$any($event.target).value)" placeholder="Ej: 4150" min="1" />
+      <input type="number" [value]="f.trm" (input)="setField('trm', +$any($event.target).value)" placeholder="Ej: 4150"
+        min="1" />
     </div>
 
     <div class="field">
@@ -48,15 +61,13 @@
       <div class="currency-row">
         <div class="currency-input">
           <span class="currency-label">USD</span>
-          <input type="number" [value]="f.valor_usd"
-            (input)="onUsdChange(+$any($event.target).value)"
+          <input type="number" [value]="f.valor_usd" (input)="onUsdChange(+$any($event.target).value)"
             placeholder="0.00" min="0" step="0.01" />
         </div>
         <div class="currency-input">
           <span class="currency-label">COP</span>
-          <input type="number" [value]="f.valor_cop"
-            (input)="onCopChange(+$any($event.target).value)"
-            placeholder="0" min="0" />
+          <input type="number" [value]="f.valor_cop" (input)="onCopChange(+$any($event.target).value)" placeholder="0"
+            min="0" />
         </div>
       </div>
       <p class="field-hint">Ingresa en cualquiera de las dos — se convierte automáticamente</p>
@@ -74,7 +85,8 @@
 
     <div class="field">
       <label>Notas <span class="optional">(opcional)</span></label>
-      <textarea [value]="f.notas || ''" (input)="setField('notas', $any($event.target).value)" placeholder="Ej: Compra por DCA mensual..." rows="3"></textarea>
+      <textarea [value]="f.notas || ''" (input)="setField('notas', $any($event.target).value)"
+        placeholder="Ej: Compra por DCA mensual..." rows="3"></textarea>
     </div>
 
     <div class="form-error" *ngIf="error()">{{ error() }}</div>
