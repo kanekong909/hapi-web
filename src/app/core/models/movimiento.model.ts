@@ -91,3 +91,45 @@ export interface PnLActivo {
     hora: string;
   }[];
 }
+
+export type TipoTransaccion = 'DEPOSITO' | 'RETIRO' | 'DIVIDENDO';
+
+export interface Transaccion {
+  id: number;
+  usuario_id: number;
+  tipo: TipoTransaccion;
+  descripcion?: string;
+  simbolo?: string;
+  monto_bruto: number;
+  impuesto: number;
+  monto_neto: number;
+  valor_cop?: number;
+  trm?: number;
+  fecha: string;
+  hora: string;
+  notas?: string;
+  created_at: string;
+}
+
+export interface TransaccionForm {
+  tipo: TipoTransaccion;
+  descripcion?: string;
+  simbolo?: string;
+  monto_bruto: number;
+  impuesto: number;
+  valor_cop?: number;
+  trm?: number;
+  fecha: string;
+  hora: string;
+  notas?: string;
+}
+
+export interface ResumenTransacciones {
+  total_depositos: number;
+  total_retiros: number;
+  total_dividendos: number;
+  total_impuestos: number;
+  num_depositos: number;
+  num_retiros: number;
+  num_dividendos: number;
+}

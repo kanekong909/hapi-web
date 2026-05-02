@@ -36,4 +36,19 @@ export const routes: Routes = [
     canActivate: [authGuard],
     loadComponent: () => import('./features/pnl/pnl').then(m => m.PnlComponent),
   },
+  {
+    path: 'transacciones',
+    canActivate: [authGuard],
+    loadComponent: () => import('./features/transacciones/transacciones').then(m => m.TransaccionesComponent),
+  },
+  {
+    path: 'transacciones/nueva',
+    canActivate: [authGuard],
+    loadComponent: () => import('./features/transacciones/form-transaccion').then(m => m.FormTransaccionComponent),
+  },
+  {
+    path: 'transacciones/editar/:id',
+    canActivate: [authGuard],
+    loadComponent: () => import('./features/transacciones/form-transaccion').then(m => m.FormTransaccionComponent),
+  },
 ];

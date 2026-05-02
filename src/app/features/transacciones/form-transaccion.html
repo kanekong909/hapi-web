@@ -1,0 +1,78 @@
+<div class="form-page">
+  <header class="form-header">
+    <button class="btn-back" (click)="cancelar()">← Volver</button>
+    <h2>{{ editId() ? 'Editar' : 'Nueva' }} transacción</h2>
+  </header>
+
+  <div class="form-body">
+
+    <div class="field">
+      <label>Tipo *</label>
+      <div class="toggle-group three">
+        <button class="toggle-btn" [class.active-dep]="f.tipo === 'DEPOSITO'"  (click)="setTipo('DEPOSITO')">💵 Depósito</button>
+        <button class="toggle-btn" [class.active-ret]="f.tipo === 'RETIRO'"    (click)="setTipo('RETIRO')">💸 Retiro</button>
+        <button class="toggle-btn" [class.active-div]="f.tipo === 'DIVIDENDO'" (click)="setTipo('DIVIDENDO')">🏦 Dividendo</button>
+      </div>
+    </div>
+
+    <div class="field" *ngIf="f.tipo === 'DIVIDENDO'">
+      <label>Símbolo del activo</label>
+      <input type="text" [value]="f.simbolo || ''" (input)="setField('simbolo', $any($event.target).value.toUpperCase())" placeholder="Ej: ORCL" style="text-transform:uppercase" />
+    </div>
+
+    <div class="field">
+      <label>Descripción</label>
+      <input type="text" [value]="f.descripcion || ''" (input)="setField('descripcion', $any($event.target).value)"
+        [placeholder]="f.tipo === 'DIVIDENDO' ? 'Ej: Dividendo ORCL' : f.tipo === 'RETIRO' ? 'Ej: Retiro a cuenta bancaria' : 'Ej: Depósito inicial'" />
+    </div>
+
+    <div class="field">
+      <label>TRM *</label>
+      <input type="number" [value]="f.trm" (input)="setField('trm', +$any($event.target).value)" placeholder="Ej: 4150" />
+    </div>
+
+    <div class="field">
+      <label>Monto bruto (USD) *</label>
+      <input type="number" [value]="f.monto_bruto" (input)="setField('monto_bruto', +$any($event.target).value)" placeholder="0.00" step="0.0001" />
+    </div>
+
+    <div class="field" *ngIf="f.tipo === 'DIVIDENDO'">
+      <label>Impuesto retenido (USD)</label>
+      <input type="number" [value]="f.impuesto" (input)="setField('impuesto', +$any($event.target).value)" placeholder="0.00" step="0.0001" />
+    </div>
+
+    <div class="monto-neto-preview" *ngIf="f.tipo === 'DIVIDENDO'">
+      <span>Total neto recibido</span>
+      <strong>{{ currency.formatUsd(montoNeto) }}</strong>
+    </div>
+
+    <div class="field">
+      <label>Equivalente en COP</label>
+      <input type="number" [value]="f.valor_cop || 0" (input)="onCopChange(+$any($event.target).value)" placeholder="0" />
+    </div>
+
+    <div class="field">
+      <label>Fecha *</label>
+      <input type="date" [value]="f.fecha" (input)="setField('fecha', $any($event.target).value)" />
+    </div>
+
+    <div class="field">
+      <label>Hora</label>
+      <input type="time" [value]="f.hora" (input)="setField('hora', $any($event.target).value)" />
+    </div>
+
+    <div class="field">
+      <label>Notas <span class="optional">(opcional)</span></label>
+      <textarea [value]="f.notas || ''" (input)="setField('notas', $any($event.target).value)" rows="3" placeholder="Cualquier detalle adicional..."></textarea>
+    </div>
+
+    <div class="form-error" *ngIf="error()">{{ error() }}</div>
+
+    <div class="form-actions">
+      <button class="btn-cancel" (click)="cancelar()">Cancelar</button>
+      <button class="btn-save" (click)="guardar()" [disabled]="saving()">
+        {{ saving() ? 'Guardando…' : (editId() ? 'Actualizar' : 'Guardar') }}
+      </button>
+    </div>
+  </div>
+</div>

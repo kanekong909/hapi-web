@@ -10,6 +10,7 @@
     <div class="topbar-right">
       <span class="usuario-nombre">{{ auth.usuario()?.nombre }}</span>
       <button class="btn-icon" (click)="router.navigate(['/pnl'])" title="P&L">📊</button>
+      <button class="btn-icon" (click)="router.navigate(['/transacciones'])" title="Depósitos y dividendos">💰</button>
       <button class="btn-nuevo" (click)="nuevo()">+ Nuevo</button>
       <button class="btn-icon" (click)="auth.logout()" title="Cerrar sesión">⏻</button>
     </div>

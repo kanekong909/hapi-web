@@ -1,0 +1,250 @@
+.page {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0 20px 60px;
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0 16px;
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+  z-index: 10;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 20px;
+
+  h1 { font-size: 18px; font-weight: 700; color: var(--text-primary); margin: 0; }
+}
+
+.btn-back {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 14px;
+  font-size: 13px;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.btn-nuevo {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 9px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ── Resumen ────────────────────────────────────────────── */
+.resumen {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.res-card {
+  border-radius: 14px;
+  padding: 14px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  border: 1px solid transparent;
+
+  &.deposito  { background: #e8f5e9; border-color: #a5d6a7; }
+  &.retiro    { background: #faece7; border-color: #ffab91; }
+  &.dividendo { background: #e8eaf6; border-color: #9fa8da; }
+
+  .res-icon  { font-size: 18px; }
+  .res-label { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .res-valor { font-size: 13px; font-weight: 700; color: var(--text-primary); }
+  .res-count { font-size: 10px; color: var(--text-muted); }
+}
+
+.res-saldo {
+  grid-column: 1 / -1;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  .res-label { font-size: 12px; color: var(--text-muted); font-weight: 600; flex: 1; }
+  .res-saldo-valor { font-size: 18px; font-weight: 800; letter-spacing: -0.5px; }
+  .res-cop { font-size: 12px; color: var(--text-muted); }
+
+  .positivo { color: #0f6e56; }
+  .negativo { color: #993c1d; }
+}
+
+/* ── Filtros ────────────────────────────────────────────── */
+.filtros {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 16px;
+  overflow-x: auto;
+  &::-webkit-scrollbar { display: none; }
+}
+
+.chip {
+  background: var(--card-bg);
+  border: 1.5px solid var(--border);
+  border-radius: 20px;
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.15s;
+
+  &.active-dep { background: #e8f5e9; border-color: #4caf50; color: #1b5e20; }
+  &.active-ret { background: #faece7; border-color: #ff5722; color: #993c1d; }
+  &.active-div { background: #e8eaf6; border-color: #3f51b5; color: #1a237e; }
+}
+
+/* ── Cards ──────────────────────────────────────────────── */
+.card {
+  background: var(--card-bg);
+  border-radius: 14px;
+  margin-bottom: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  border-left: 4px solid transparent;
+
+  &.deposito  { border-left-color: #4caf50; }
+  &.retiro    { border-left-color: #ff5722; }
+  &.dividendo { border-left-color: #3f51b5; }
+}
+
+.card-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+}
+
+.tipo-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+  width: 40px;
+  text-align: center;
+}
+
+.card-info {
+  flex: 1;
+  min-width: 0;
+
+  .card-titulo {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .card-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+}
+
+.tipo-tag {
+  font-size: 10px;
+  font-weight: 600;
+  border-radius: 4px;
+  padding: 2px 6px;
+
+  &.deposito  { background: #e8f5e9; color: #1b5e20; }
+  &.retiro    { background: #faece7; color: #993c1d; }
+  &.dividendo { background: #e8eaf6; color: #1a237e; }
+}
+
+.card-monto {
+  text-align: right;
+  flex-shrink: 0;
+
+  .monto-neto { font-size: 14px; font-weight: 700; }
+  .monto-cop  { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+  .positivo { color: #0f6e56; }
+  .negativo { color: #993c1d; }
+}
+
+.chevron {
+  font-size: 11px;
+  color: var(--text-muted);
+  transition: transform 0.2s;
+  flex-shrink: 0;
+  &.open { transform: rotate(180deg); }
+}
+
+.card-detalle {
+  border-top: 1px solid var(--border);
+  padding: 14px 16px;
+}
+
+.detalle-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.di {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  &.full { grid-column: 1 / -1; }
+  .dl { font-size: 11px; color: var(--text-muted); }
+  .dv { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+}
+
+.card-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+
+  button {
+    flex: 1;
+    padding: 9px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+  }
+  .btn-edit   { background: var(--surface2); color: var(--text-primary); }
+  .btn-delete { background: #faece7; color: #993c1d; }
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  padding: 40px 0;
+}
+
+.spinner {
+  width: 28px; height: 28px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.empty {
+  text-align: center;
+  padding: 48px 0;
+  color: var(--text-muted);
+  p { margin-bottom: 16px; font-size: 15px; }
+}

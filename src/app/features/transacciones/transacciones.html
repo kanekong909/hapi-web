@@ -1,0 +1,89 @@
+<div class="page">
+  <header class="topbar">
+    <button class="btn-back" (click)="router.navigate(['/movimientos'])">← Volver</button>
+    <h1>Transacciones</h1>
+    <button class="btn-nuevo" (click)="router.navigate(['/transacciones/nueva'])">+ Nueva</button>
+  </header>
+
+  <!-- Resumen -->
+  <div class="resumen" *ngIf="resumen()">
+    <div class="res-card deposito">
+      <span class="res-icon">💵</span>
+      <span class="res-label">Depósitos</span>
+      <span class="res-valor">{{ currency.formatUsd(resumen()!.total_depositos) }}</span>
+      <span class="res-count">{{ resumen()!.num_depositos }} movimientos</span>
+    </div>
+    <div class="res-card retiro">
+      <span class="res-icon">💸</span>
+      <span class="res-label">Retiros</span>
+      <span class="res-valor">{{ currency.formatUsd(resumen()!.total_retiros) }}</span>
+      <span class="res-count">{{ resumen()!.num_retiros }} movimientos</span>
+    </div>
+    <div class="res-card dividendo">
+      <span class="res-icon">🏦</span>
+      <span class="res-label">Dividendos</span>
+      <span class="res-valor">{{ currency.formatUsd(resumen()!.total_dividendos) }}</span>
+      <span class="res-count">imp. {{ currency.formatUsd(resumen()!.total_impuestos) }}</span>
+    </div>
+    <div class="res-saldo">
+      <span class="res-label">Saldo neto en Hapi</span>
+      <span class="res-saldo-valor" [class.positivo]="saldoNeto >= 0" [class.negativo]="saldoNeto < 0">
+        {{ currency.formatUsd(saldoNeto) }}
+      </span>
+      <span class="res-cop">{{ currency.formatCop(saldoNeto * currency.trm()) }}</span>
+    </div>
+  </div>
+
+  <!-- Filtros -->
+  <div class="filtros">
+    <button class="chip" [class.active-dep]="filtroTipo() === 'DEPOSITO'"  (click)="setFiltro('DEPOSITO')">💵 Depósitos</button>
+    <button class="chip" [class.active-ret]="filtroTipo() === 'RETIRO'"    (click)="setFiltro('RETIRO')">💸 Retiros</button>
+    <button class="chip" [class.active-div]="filtroTipo() === 'DIVIDENDO'" (click)="setFiltro('DIVIDENDO')">🏦 Dividendos</button>
+  </div>
+
+  <div class="loading" *ngIf="loading()"><div class="spinner"></div></div>
+
+  <div class="lista" *ngIf="!loading()">
+    <div class="empty" *ngIf="lista().length === 0">
+      <p>No hay transacciones registradas.</p>
+      <button class="btn-nuevo" (click)="router.navigate(['/transacciones/nueva'])">+ Registrar primera</button>
+    </div>
+
+    <div class="card" *ngFor="let t of lista()" [class]="tipoColor(t.tipo)" (click)="toggle(t.id)">
+      <div class="card-head">
+        <div class="tipo-icon">{{ tipoIcon(t.tipo) }}</div>
+        <div class="card-info">
+          <div class="card-titulo">
+            {{ t.descripcion || t.tipo }}
+            <span class="tipo-tag" [class]="tipoColor(t.tipo)">{{ t.tipo }}</span>
+          </div>
+          <div class="card-sub">
+            {{ fechaFormateada(t.fecha) }}
+            <span *ngIf="t.simbolo"> · {{ t.simbolo }}</span>
+          </div>
+        </div>
+        <div class="card-monto">
+          <div class="monto-neto" [class.positivo]="t.tipo !== 'RETIRO'" [class.negativo]="t.tipo === 'RETIRO'">
+            {{ t.tipo === 'RETIRO' ? '-' : '+' }}{{ currency.formatUsd(t.monto_neto) }}
+          </div>
+          <div class="monto-cop" *ngIf="t.valor_cop">{{ currency.formatCop(t.valor_cop) }}</div>
+        </div>
+        <span class="chevron" [class.open]="expandido() === t.id">▼</span>
+      </div>
+
+      <div class="card-detalle" *ngIf="expandido() === t.id">
+        <div class="detalle-grid">
+          <div class="di"><span class="dl">Monto bruto</span><span class="dv">{{ currency.formatUsd(t.monto_bruto) }}</span></div>
+          <div class="di"><span class="dl">Impuesto</span><span class="dv">{{ currency.formatUsd(t.impuesto) }}</span></div>
+          <div class="di"><span class="dl">Total neto</span><span class="dv">{{ currency.formatUsd(t.monto_neto) }}</span></div>
+          <div class="di" *ngIf="t.trm"><span class="dl">TRM</span><span class="dv">{{ currency.formatCop(t.trm) }}</span></div>
+        </div>
+        <div class="di full" *ngIf="t.notas"><span class="dl">Notas</span><span class="dv">{{ t.notas }}</span></div>
+        <div class="card-actions" (click)="$event.stopPropagation()">
+          <button class="btn-edit"   (click)="editar($event, t.id)">✏ Editar</button>
+          <button class="btn-delete" (click)="confirmarEliminar($event, t.id)">✕ Eliminar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
