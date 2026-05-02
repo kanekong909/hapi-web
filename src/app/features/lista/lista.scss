@@ -203,3 +203,49 @@
   transition: opacity 0.15s;
   &:active { opacity: 0.7; }
 }
+
+.fecha-rango {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.fecha-input {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 130px;
+
+  label {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 600;
+  }
+
+  input {
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 13px;
+    background: var(--card-bg);
+    color: var(--text-primary);
+    outline: none;
+    font-family: inherit;
+    &:focus { border-color: var(--accent); }
+  }
+}
+
+.chip-limpiar {
+  background: #faece7;
+  color: #993c1d;
+  border: none;
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+  margin-bottom: 1px;
+}

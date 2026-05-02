@@ -23,15 +23,19 @@ export class ListaComponent implements OnInit {
   filtroOrden = signal<string>('');
   filtroTipo = signal<string>('');
   busqueda = signal<string>('');
+  fechaDesde = signal<string>('');
+  fechaHasta = signal<string>('');
 
   totalPages = signal(1);
   currentPage = signal(1);
 
   // Filtro local — busca en nombre Y símbolo
   movimientos = computed(() => {
-    const texto = this.busqueda().toLowerCase().trim();
-    const orden = this.filtroOrden();
-    const tipo = this.filtroTipo();
+    const texto  = this.busqueda().toLowerCase().trim();
+    const orden  = this.filtroOrden();
+    const tipo   = this.filtroTipo();
+    const desde  = this.fechaDesde();
+    const hasta  = this.fechaHasta();
 
     return this.todosLosMovimientos().filter(m => {
       const matchTexto = !texto ||
@@ -39,7 +43,10 @@ export class ListaComponent implements OnInit {
         m.simbolo.toLowerCase().includes(texto);
       const matchOrden = !orden || m.orden === orden;
       const matchTipo  = !tipo  || m.tipo  === tipo;
-      return matchTexto && matchOrden && matchTipo;
+      const fechaMov   = m.fecha.substring(0, 10);
+      const matchDesde = !desde || fechaMov >= desde;
+      const matchHasta = !hasta || fechaMov <= hasta;
+      return matchTexto && matchOrden && matchTipo && matchDesde && matchHasta;
     });
   });
 
@@ -95,5 +102,10 @@ export class ListaComponent implements OnInit {
   }
   paginaSiguiente() {
     if (this.currentPage() < this.totalPages()) { this.currentPage.update(p => p + 1); this.cargar(); }
+  }
+
+  limpiarFechas() {
+    this.fechaDesde.set('');
+    this.fechaHasta.set('');
   }
 }

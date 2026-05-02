@@ -1,18 +1,18 @@
 <div class="page">
   <!-- Header -->
-<header class="topbar">
-  <div class="topbar-left">
-    <h1>Hapi <span class="accent">Tracker</span></h1>
-    <div class="trm-badge" *ngIf="currency.trmLoaded()">
-      TRM {{ currency.formatCop(currency.trm()) }}
+  <header class="topbar">
+    <div class="topbar-left">
+      <h1>Hapi <span class="accent">Tracker</span></h1>
+      <div class="trm-badge" *ngIf="currency.trmLoaded()">
+        TRM {{ currency.formatCop(currency.trm()) }}
+      </div>
     </div>
-  </div>
-  <div class="topbar-right">
-    <span class="usuario-nombre">{{ auth.usuario()?.nombre }}</span>
-    <button class="btn-logout" (click)="auth.logout()" title="Cerrar sesión">⏻</button>
-    <button class="btn-nuevo" (click)="nuevo()">+ Nuevo</button>
-  </div>
-</header>
+    <div class="topbar-right">
+      <span class="usuario-nombre">{{ auth.usuario()?.nombre }}</span>
+      <button class="btn-logout" (click)="auth.logout()" title="Cerrar sesión">⏻</button>
+      <button class="btn-nuevo" (click)="nuevo()">+ Nuevo</button>
+    </div>
+  </header>
 
   <!-- Stats -->
   <div class="stats-row" *ngIf="stats()">
@@ -35,22 +35,31 @@
 
   <!-- Búsqueda -->
   <div class="search-wrap">
-    <input
-      class="search-input"
-      type="text"
-      placeholder="Buscar por símbolo (AAPL, BTC…)"
-      [value]="busqueda()"
-      (input)="onBusqueda($any($event.target).value)"
-    />
+    <input class="search-input" type="text" placeholder="Buscar por símbolo (AAPL, BTC…)" [value]="busqueda()"
+      (input)="onBusqueda($any($event.target).value)" />
   </div>
 
   <!-- Filtros -->
   <div class="filtros">
     <button class="chip" [class.active]="filtroOrden() === 'COMPRA'" (click)="setFiltroOrden('COMPRA')">Compras</button>
-    <button class="chip" [class.active]="filtroOrden() === 'VENTA'"  (click)="setFiltroOrden('VENTA')">Ventas</button>
-    <button class="chip" [class.active]="filtroTipo() === 'ACCION'"  (click)="setFiltroTipo('ACCION')">Acciones</button>
-    <button class="chip" [class.active]="filtroTipo() === 'CRIPTO'"  (click)="setFiltroTipo('CRIPTO')">Cripto</button>
-    <button class="chip" [class.active]="filtroTipo() === 'ETF'"     (click)="setFiltroTipo('ETF')">ETFs</button>
+    <button class="chip" [class.active]="filtroOrden() === 'VENTA'" (click)="setFiltroOrden('VENTA')">Ventas</button>
+    <button class="chip" [class.active]="filtroTipo() === 'ACCION'" (click)="setFiltroTipo('ACCION')">Acciones</button>
+    <button class="chip" [class.active]="filtroTipo() === 'CRIPTO'" (click)="setFiltroTipo('CRIPTO')">Cripto</button>
+    <button class="chip" [class.active]="filtroTipo() === 'ETF'" (click)="setFiltroTipo('ETF')">ETFs</button>
+  </div>
+
+  <div class="fecha-rango">
+    <div class="fecha-input">
+      <label>Desde</label>
+      <input type="date" [value]="fechaDesde()" (input)="fechaDesde.set($any($event.target).value)" />
+    </div>
+    <div class="fecha-input">
+      <label>Hasta</label>
+      <input type="date" [value]="fechaHasta()" (input)="fechaHasta.set($any($event.target).value)" />
+    </div>
+    <button class="chip-limpiar" *ngIf="fechaDesde() || fechaHasta()" (click)="limpiarFechas()">
+      ✕ Limpiar
+    </button>
   </div>
 
   <!-- Loading -->
@@ -72,11 +81,7 @@
       <button class="btn-nuevo" (click)="nuevo()">+ Registrar primero</button>
     </div>
 
-    <app-card-movimiento
-      *ngFor="let m of movimientos()"
-      [movimiento]="m"
-      (deleted)="onDeleted($event)"
-    />
+    <app-card-movimiento *ngFor="let m of movimientos()" [movimiento]="m" (deleted)="onDeleted($event)" />
 
     <!-- Paginación -->
     <div class="pagination" *ngIf="totalPages() > 1">
