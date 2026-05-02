@@ -177,3 +177,29 @@
 
   span { font-size: 13px; color: var(--text-muted); }
 }
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.usuario-nombre {
+  font-size: 13px;
+  color: var(--text-muted);
+  display: none;
+
+  @media (min-width: 400px) { display: block; }
+}
+
+.btn-logout {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 7px 10px;
+  font-size: 14px;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: opacity 0.15s;
+  &:active { opacity: 0.7; }
+}

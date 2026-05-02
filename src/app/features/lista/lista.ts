@@ -6,6 +6,7 @@ import { MovimientosService } from '../../core/services/movimientos';
 import { CurrencyService } from '../../core/services/currency';
 import { CardMovimientoComponent } from '../../shared/card-movimiento/card-movimiento';
 import { Movimiento, StatsResumen, FiltrosMovimiento, Orden, TipoActivo } from '../../core/models/movimiento.model';
+import { AuthService } from '../../core/services/auth';
 
 @Component({
   selector: 'app-lista',
@@ -45,7 +46,8 @@ export class ListaComponent implements OnInit {
   constructor(
     private svc: MovimientosService,
     private router: Router,
-    public currency: CurrencyService
+    public currency: CurrencyService,
+    public auth: AuthService
   ) {}
 
   ngOnInit() {

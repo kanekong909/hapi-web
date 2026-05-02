@@ -1,14 +1,18 @@
 <div class="page">
   <!-- Header -->
-  <header class="topbar">
-    <div class="topbar-left">
-      <h1>Hapi <span class="accent">Tracker</span></h1>
-      <div class="trm-badge" *ngIf="currency.trmLoaded()">
-        TRM {{ currency.formatCop(currency.trm()) }}
-      </div>
+<header class="topbar">
+  <div class="topbar-left">
+    <h1>Hapi <span class="accent">Tracker</span></h1>
+    <div class="trm-badge" *ngIf="currency.trmLoaded()">
+      TRM {{ currency.formatCop(currency.trm()) }}
     </div>
+  </div>
+  <div class="topbar-right">
+    <span class="usuario-nombre">{{ auth.usuario()?.nombre }}</span>
+    <button class="btn-logout" (click)="auth.logout()" title="Cerrar sesión">⏻</button>
     <button class="btn-nuevo" (click)="nuevo()">+ Nuevo</button>
-  </header>
+  </div>
+</header>
 
   <!-- Stats -->
   <div class="stats-row" *ngIf="stats()">

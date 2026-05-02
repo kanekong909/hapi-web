@@ -1,0 +1,30 @@
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-logo">📈</div>
+    <h1>Crear cuenta</h1>
+    <p class="auth-sub">Registra tus inversiones en Hapi</p>
+
+    <div class="field">
+      <label>Nombre</label>
+      <input type="text" placeholder="Tu nombre" [value]="nombre" (input)="onNombre($event)" />
+    </div>
+
+    <div class="field">
+      <label>Email</label>
+      <input type="email" placeholder="tu@email.com" [value]="email" (input)="onEmail($event)" />
+    </div>
+
+    <div class="field">
+      <label>Contraseña</label>
+      <input type="password" placeholder="Mínimo 6 caracteres" [value]="password" (input)="onPassword($event)" />
+    </div>
+
+    <div class="auth-error" *ngIf="error()">{{ error() }}</div>
+
+    <button class="btn-primary" (click)="registrar()" [disabled]="loading()">
+      {{ loading() ? 'Creando cuenta…' : 'Crear cuenta' }}
+    </button>
+
+    <p class="auth-link">¿Ya tienes cuenta? <a routerLink="/auth/login">Inicia sesión</a></p>
+  </div>
+</div>

@@ -59,3 +59,14 @@ export interface StatsResumen {
   vendido_usd: number;
   vendido_cop: number;
 }
+
+export interface Usuario {
+  id: number;
+  nombre: string;
+  email: string;
+}
+
+export interface AuthResponse {
+  token: string;
+  usuario: Usuario;
+}
