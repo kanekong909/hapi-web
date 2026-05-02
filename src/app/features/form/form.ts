@@ -53,9 +53,15 @@ export class FormComponent implements OnInit {
       this.editId.set(+id);
       this.svc.getById(+id).subscribe(m => {
         this.form = {
-          orden: m.orden, nombre: m.nombre, simbolo: m.simbolo,
-          tipo: m.tipo, valor_usd: m.valor_usd, valor_cop: m.valor_cop,
-          trm: m.trm, fecha: m.fecha.split('T')[0], notas: m.notas ?? '',
+          orden: m.orden,
+          nombre: m.nombre,
+          simbolo: m.simbolo,
+          tipo: m.tipo,
+          valor_usd: Number(m.valor_usd),
+          valor_cop: Number(m.valor_cop),
+          trm: Number(m.trm),
+          fecha: String(m.fecha).substring(0, 10),
+          notas: m.notas ?? '',
         };
       });
     }

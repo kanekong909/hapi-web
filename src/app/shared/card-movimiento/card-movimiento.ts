@@ -40,7 +40,8 @@ export class CardMovimientoComponent {
   }
 
   get fechaFormateada(): string {
-    return new Date(this.movimiento.fecha + 'T00:00:00').toLocaleDateString('es-CO', {
+    const [year, month, day] = this.movimiento.fecha.split('T')[0].split('-').map(Number);
+    return new Date(year, month - 1, day).toLocaleDateString('es-CO', {
       day: '2-digit', month: 'short', year: 'numeric'
     });
   }
