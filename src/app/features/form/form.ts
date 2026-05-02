@@ -6,6 +6,18 @@ import { MovimientosService } from '../../core/services/movimientos';
 import { CurrencyService } from '../../core/services/currency';
 import { MovimientoForm, Orden, TipoActivo } from '../../core/models/movimiento.model';
 
+const formVacio = (): MovimientoForm => ({
+  orden: 'COMPRA',
+  nombre: '',
+  simbolo: '',
+  tipo: 'ACCION',
+  valor_usd: 0,
+  valor_cop: 0,
+  trm: 0,
+  fecha: new Date().toISOString().split('T')[0],
+  notas: '',
+});
+
 @Component({
   selector: 'app-form',
   imports: [CommonModule, FormsModule],
@@ -16,18 +28,7 @@ export class FormComponent implements OnInit {
   editId = signal<number | null>(null);
   saving = signal(false);
   error = signal<string | null>(null);
-
-  form: MovimientoForm = {
-    orden: 'COMPRA',
-    nombre: '',
-    simbolo: '',
-    tipo: 'ACCION',
-    valor_usd: 0,
-    valor_cop: 0,
-    trm: 0,
-    fecha: new Date().toISOString().split('T')[0],
-    notas: '',
-  };
+  form = signal<MovimientoForm>(formVacio());
 
   constructor(
     private route: ActivatedRoute,
@@ -37,12 +38,13 @@ export class FormComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // Esperar TRM y setear
+    // Setear TRM
     const setTrm = () => {
-      if (this.form.trm === 0) this.form.trm = this.currency.trm();
+      this.form.update(f => ({ ...f, trm: this.currency.trm() }));
     };
-    setTrm();
-    if (!this.currency.trmLoaded()) {
+    if (this.currency.trmLoaded()) {
+      setTrm();
+    } else {
       const interval = setInterval(() => {
         if (this.currency.trmLoaded()) { setTrm(); clearInterval(interval); }
       }, 300);
@@ -52,7 +54,7 @@ export class FormComponent implements OnInit {
     if (id) {
       this.editId.set(+id);
       this.svc.getById(+id).subscribe(m => {
-        this.form = {
+        this.form.set({
           orden: m.orden,
           nombre: m.nombre,
           simbolo: m.simbolo,
@@ -62,39 +64,41 @@ export class FormComponent implements OnInit {
           trm: Number(m.trm),
           fecha: String(m.fecha).substring(0, 10),
           notas: m.notas ?? '',
-        };
+        });
       });
     }
   }
 
-  onUsdChange() {
-    if (this.form.valor_usd > 0) {
-      this.form.valor_cop = Math.round(this.form.valor_usd * this.form.trm);
-    }
+  get f() { return this.form(); }
+
+  onUsdChange(val: number) {
+    this.form.update(f => ({ ...f, valor_usd: val, valor_cop: Math.round(val * f.trm) }));
   }
 
-  onCopChange() {
-    if (this.form.valor_cop > 0) {
-      this.form.valor_usd = parseFloat((this.form.valor_cop / this.form.trm).toFixed(2));
-    }
+  onCopChange(val: number) {
+    this.form.update(f => ({ ...f, valor_cop: val, valor_usd: parseFloat((val / f.trm).toFixed(2)) }));
   }
 
-  setOrden(orden: Orden) { this.form.orden = orden; }
-  setTipo(tipo: TipoActivo) { this.form.tipo = tipo; }
+  setOrden(orden: Orden) { this.form.update(f => ({ ...f, orden })); }
+  setTipo(tipo: TipoActivo) { this.form.update(f => ({ ...f, tipo })); }
+
+  setField(key: keyof MovimientoForm, val: any) {
+    this.form.update(f => ({ ...f, [key]: val }));
+  }
 
   guardar() {
     this.error.set(null);
-    if (!this.form.nombre || !this.form.simbolo || !this.form.fecha) {
+    const f = this.form();
+    if (!f.nombre || !f.simbolo || !f.fecha) {
       this.error.set('Completa todos los campos obligatorios');
       return;
     }
-    if (!this.form.valor_usd || !this.form.valor_cop) {
+    if (!f.valor_usd || !f.valor_cop) {
       this.error.set('Ingresa el valor en USD o COP');
       return;
     }
-
     this.saving.set(true);
-    const payload = { ...this.form, simbolo: this.form.simbolo.toUpperCase() };
+    const payload = { ...f, simbolo: f.simbolo.toUpperCase() };
     const request = this.editId()
       ? this.svc.update(this.editId()!, payload)
       : this.svc.create(payload);
