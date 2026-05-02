@@ -1,0 +1,183 @@
+.page {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0 16px 48px;
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 20px 0;
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+  z-index: 10;
+
+  h1 { font-size: 18px; font-weight: 700; color: var(--text-primary); margin: 0; }
+}
+
+.btn-back {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 14px;
+  font-size: 13px;
+  color: var(--text-primary);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.resumen-global {
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+
+  &.positivo { background: linear-gradient(135deg, #e1f5ee, #c8edd9); }
+  &.negativo { background: linear-gradient(135deg, #faece7, #f5d0c5); }
+
+  .rg-label { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .rg-valor { font-size: 28px; font-weight: 700; color: var(--text-primary); }
+  .rg-cop   { font-size: 14px; color: var(--text-muted); margin-top: 4px; }
+  .rg-pills { display: flex; justify-content: center; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+}
+
+.pill-verde, .pill-rojo {
+  font-size: 12px;
+  border-radius: 20px;
+  padding: 4px 12px;
+}
+.pill-verde { background: #e1f5ee; color: #0f6e56; }
+.pill-rojo  { background: #faece7; color: #993c1d; }
+
+.activo-card {
+  background: var(--card-bg);
+  border-radius: 14px;
+  margin-bottom: 10px;
+  overflow: hidden;
+  border-left: 4px solid transparent;
+
+  &.ganancia { border-left-color: #1D9E75; }
+  &.perdida  { border-left-color: #D85A30; }
+  &.neutro   { border-left-color: var(--border); }
+}
+
+.activo-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  cursor: pointer;
+}
+
+.activo-badge {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: var(--surface2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-primary);
+  flex-shrink: 0;
+}
+
+.activo-info {
+  flex: 1;
+  min-width: 0;
+
+  .activo-nombre { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+  .activo-sub    { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+}
+
+.activo-pnl {
+  text-align: right;
+  flex-shrink: 0;
+
+  .pnl-valor { font-size: 14px; font-weight: 700; }
+  .pnl-pct   { font-size: 12px; margin-top: 2px; }
+}
+
+.verde { color: #0f6e56; }
+.rojo  { color: #993c1d; }
+
+.chevron {
+  font-size: 11px;
+  color: var(--text-muted);
+  transition: transform 0.2s;
+  flex-shrink: 0;
+  &.open { transform: rotate(180deg); }
+}
+
+.activo-detalle {
+  border-top: 1px solid var(--border);
+  padding: 14px 16px;
+}
+
+.detalle-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.di {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  .dl { font-size: 11px; color: var(--text-muted); }
+  .dv { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+}
+
+.historial-titulo {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+}
+
+.historial-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+
+  &:last-child { border-bottom: none; }
+
+  .hist-icono { flex-shrink: 0; }
+  .hist-fecha { color: var(--text-muted); flex: 1; }
+  .hist-orden {
+    font-size: 10px; font-weight: 600; border-radius: 4px; padding: 2px 6px;
+    &.compra { background: #e1f5ee; color: #0f6e56; }
+    &.venta  { background: #faece7; color: #993c1d; }
+  }
+  .hist-cant  { color: var(--text-muted); }
+  .hist-valor { font-weight: 600; color: var(--text-primary); }
+}
+
+.loading {
+  display: flex; justify-content: center; padding: 40px 0;
+}
+
+.spinner {
+  width: 28px; height: 28px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.empty {
+  text-align: center; padding: 48px 0; color: var(--text-muted);
+}

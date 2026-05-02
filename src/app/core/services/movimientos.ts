@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { Movimiento, MovimientoForm, PaginatedResponse, FiltrosMovimiento, StatsResumen } from '../models/movimiento.model';
+import { Movimiento, MovimientoForm, PaginatedResponse, FiltrosMovimiento, StatsResumen, PnLActivo } from '../models/movimiento.model';
 
 @Injectable({ providedIn: 'root' })
 export class MovimientosService {
@@ -42,4 +42,9 @@ export class MovimientosService {
   getPorActivo(): Observable<any[]> {
     return this.http.get<any[]>(`${this.statsBase}/por-activo`);
   }
+
+  getPnL(): Observable<PnLActivo[]> {
+    return this.http.get<PnLActivo[]>(`${this.statsBase}/pnl`);
+  }
 }
+  

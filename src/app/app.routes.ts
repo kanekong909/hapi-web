@@ -31,4 +31,9 @@ export const routes: Routes = [
     canActivate: [authGuard],
     loadComponent: () => import('./features/form/form').then(m => m.FormComponent),
   },
+  {
+    path: 'pnl',
+    canActivate: [authGuard],
+    loadComponent: () => import('./features/pnl/pnl').then(m => m.PnlComponent),
+  },
 ];

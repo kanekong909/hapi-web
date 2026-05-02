@@ -52,7 +52,7 @@ export class ListaComponent implements OnInit {
 
   constructor(
     private svc: MovimientosService,
-    private router: Router,
+    public router: Router,
     public currency: CurrencyService,
     public auth: AuthService
   ) {}

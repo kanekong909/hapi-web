@@ -70,3 +70,24 @@ export interface AuthResponse {
   token: string;
   usuario: Usuario;
 }
+
+export interface PnLActivo {
+  simbolo: string;
+  nombre: string;
+  tipo: TipoActivo;
+  cantidad_comprada: number;
+  cantidad_vendida: number;
+  cantidad_en_mano: number;
+  total_invertido_usd: number;
+  total_vendido_usd: number;
+  ganancia_realizada_usd: number;
+  precio_promedio_usd: number;
+  pnl_porcentaje: number;
+  movimientos: {
+    orden: Orden;
+    cantidad: number;
+    valor_usd: number;
+    fecha: string;
+    hora: string;
+  }[];
+}

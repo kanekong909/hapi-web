@@ -1,0 +1,74 @@
+<div class="page">
+  <header class="topbar">
+    <button class="btn-back" (click)="volver()">← Volver</button>
+    <h1>P&amp;L por Activo</h1>
+  </header>
+
+  <div class="loading" *ngIf="loading()">
+    <div class="spinner"></div>
+  </div>
+
+  <ng-container *ngIf="!loading()">
+
+    <!-- Resumen global -->
+    <div class="resumen-global" [class.positivo]="totalGanancia >= 0" [class.negativo]="totalGanancia < 0">
+      <div class="rg-label">Ganancia / Pérdida total realizada</div>
+      <div class="rg-valor">{{ currency.formatUsd(totalGanancia) }}</div>
+      <div class="rg-cop">{{ currency.formatCop(totalGanancia * currency.trm()) }}</div>
+      <div class="rg-pills">
+        <span class="pill-verde">✅ {{ activosConGanancia }} con ganancia</span>
+        <span class="pill-rojo">❌ {{ activosConPerdida }} con pérdida</span>
+      </div>
+    </div>
+
+    <!-- Lista de activos -->
+    <div class="activo-card" *ngFor="let a of datos()"
+         [class.ganancia]="a.ganancia_realizada_usd > 0"
+         [class.perdida]="a.ganancia_realizada_usd < 0"
+         [class.neutro]="a.ganancia_realizada_usd === 0">
+
+      <div class="activo-head" (click)="toggle(a.simbolo)">
+        <div class="activo-badge">{{ a.simbolo }}</div>
+        <div class="activo-info">
+          <div class="activo-nombre">{{ a.nombre }}</div>
+          <div class="activo-sub">{{ a.tipo }} · {{ a.cantidad_en_mano }} en mano</div>
+        </div>
+        <div class="activo-pnl">
+          <div class="pnl-valor" [class.verde]="a.ganancia_realizada_usd > 0" [class.rojo]="a.ganancia_realizada_usd < 0">
+            {{ a.ganancia_realizada_usd >= 0 ? '+' : '' }}{{ currency.formatUsd(a.ganancia_realizada_usd) }}
+          </div>
+          <div class="pnl-pct" [class.verde]="a.pnl_porcentaje > 0" [class.rojo]="a.pnl_porcentaje < 0">
+            {{ a.pnl_porcentaje >= 0 ? '+' : '' }}{{ a.pnl_porcentaje }}%
+          </div>
+        </div>
+        <span class="chevron" [class.open]="expandido() === a.simbolo">▼</span>
+      </div>
+
+      <!-- Detalle expandido -->
+      <div class="activo-detalle" *ngIf="expandido() === a.simbolo">
+        <div class="detalle-grid">
+          <div class="di"><span class="dl">Invertido</span><span class="dv">{{ currency.formatUsd(a.total_invertido_usd) }}</span></div>
+          <div class="di"><span class="dl">Recuperado</span><span class="dv">{{ currency.formatUsd(a.total_vendido_usd) }}</span></div>
+          <div class="di"><span class="dl">Compradas</span><span class="dv">{{ a.cantidad_comprada }}</span></div>
+          <div class="di"><span class="dl">Vendidas</span><span class="dv">{{ a.cantidad_vendida }}</span></div>
+          <div class="di"><span class="dl">En mano</span><span class="dv">{{ a.cantidad_en_mano }}</span></div>
+          <div class="di"><span class="dl">Precio prom.</span><span class="dv">{{ currency.formatUsd(a.precio_promedio_usd) }}</span></div>
+        </div>
+
+        <div class="historial-titulo">Historial de movimientos</div>
+        <div class="historial-item" *ngFor="let m of a.movimientos">
+          <span class="hist-icono">{{ m.orden === 'COMPRA' ? '📈' : '📉' }}</span>
+          <span class="hist-fecha">{{ fechaFormateada(m.fecha) }}</span>
+          <span class="hist-orden" [class.compra]="m.orden === 'COMPRA'" [class.venta]="m.orden === 'VENTA'">{{ m.orden }}</span>
+          <span class="hist-cant">× {{ m.cantidad }}</span>
+          <span class="hist-valor">{{ currency.formatUsd(m.valor_usd) }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="empty" *ngIf="datos().length === 0">
+      <p>No hay movimientos para calcular.</p>
+    </div>
+
+  </ng-container>
+</div>

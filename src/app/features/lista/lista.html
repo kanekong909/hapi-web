@@ -11,6 +11,7 @@
       <span class="usuario-nombre">{{ auth.usuario()?.nombre }}</span>
       <button class="btn-logout" (click)="auth.logout()" title="Cerrar sesión">⏻</button>
       <button class="btn-nuevo" (click)="nuevo()">+ Nuevo</button>
+      <button class="btn-pnl" (click)="router.navigate(['/pnl'])">📊 P&amp;L</button>
     </div>
   </header>
 
