@@ -41,8 +41,12 @@ export class CardMovimientoComponent {
 
   get fechaFormateada(): string {
     const [year, month, day] = this.movimiento.fecha.split('T')[0].split('-').map(Number);
-    return new Date(year, month - 1, day).toLocaleDateString('es-CO', {
+    const fecha = new Date(year, month - 1, day).toLocaleDateString('es-CO', {
       day: '2-digit', month: 'short', year: 'numeric'
     });
+    const hora = this.movimiento.hora
+      ? this.movimiento.hora.substring(0, 5)  // "HH:MM"
+      : '';
+    return hora ? `${fecha} · ${hora}` : fecha;
   }
 }

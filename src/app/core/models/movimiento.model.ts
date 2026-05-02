@@ -14,6 +14,7 @@ export interface Movimiento {
   notas?: string;
   created_at: string;
   updated_at: string;
+  hora: string;
 }
 
 export interface MovimientoForm {
@@ -26,6 +27,7 @@ export interface MovimientoForm {
   trm: number;
   fecha: string;
   notas?: string;
+  hora: string;
 }
 
 export interface PaginatedResponse<T> {

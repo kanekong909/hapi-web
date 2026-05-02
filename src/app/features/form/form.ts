@@ -16,6 +16,7 @@ const formVacio = (): MovimientoForm => ({
   trm: 0,
   fecha: new Date().toISOString().split('T')[0],
   notas: '',
+  hora: '00:00:00',
 });
 
 @Component({
@@ -64,6 +65,7 @@ export class FormComponent implements OnInit {
           trm: Number(m.trm),
           fecha: String(m.fecha).substring(0, 10),
           notas: m.notas ?? '',
+          hora: m.hora ?? '00:00:00',   // ← agrega esta línea
         });
       });
     }

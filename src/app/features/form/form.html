@@ -68,6 +68,11 @@
     </div>
 
     <div class="field">
+      <label>Hora</label>
+      <input type="time" [value]="f.hora" (input)="setField('hora', $any($event.target).value)" />
+    </div>
+
+    <div class="field">
       <label>Notas <span class="optional">(opcional)</span></label>
       <textarea [value]="f.notas || ''" (input)="setField('notas', $any($event.target).value)" placeholder="Ej: Compra por DCA mensual..." rows="3"></textarea>
     </div>
