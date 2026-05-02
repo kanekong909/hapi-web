@@ -14,7 +14,7 @@ import { Movimiento, StatsResumen, FiltrosMovimiento, Orden, TipoActivo } from '
   styleUrl: './lista.scss'
 })
 export class ListaComponent implements OnInit {
-  movimientos = signal<Movimiento[]>([]);
+  todosLosMovimientos = signal<Movimiento[]>([]);
   stats = signal<StatsResumen | null>(null);
   loading = signal(true);
   error = signal<string | null>(null);
@@ -25,6 +25,22 @@ export class ListaComponent implements OnInit {
 
   totalPages = signal(1);
   currentPage = signal(1);
+
+  // Filtro local — busca en nombre Y símbolo
+  movimientos = computed(() => {
+    const texto = this.busqueda().toLowerCase().trim();
+    const orden = this.filtroOrden();
+    const tipo = this.filtroTipo();
+
+    return this.todosLosMovimientos().filter(m => {
+      const matchTexto = !texto ||
+        m.nombre.toLowerCase().includes(texto) ||
+        m.simbolo.toLowerCase().includes(texto);
+      const matchOrden = !orden || m.orden === orden;
+      const matchTipo  = !tipo  || m.tipo  === tipo;
+      return matchTexto && matchOrden && matchTipo;
+    });
+  });
 
   constructor(
     private svc: MovimientosService,
@@ -39,14 +55,11 @@ export class ListaComponent implements OnInit {
 
   cargar() {
     this.loading.set(true);
-    const filtros: FiltrosMovimiento = { page: this.currentPage(), limit: 20 };
-    if (this.filtroOrden()) filtros.orden = this.filtroOrden() as Orden;
-    if (this.filtroTipo()) filtros.tipo = this.filtroTipo() as TipoActivo;
-    if (this.busqueda()) filtros.simbolo = this.busqueda();
+    const filtros: FiltrosMovimiento = { page: this.currentPage(), limit: 100 };
 
     this.svc.getAll(filtros).subscribe({
       next: res => {
-        this.movimientos.set(res.data);
+        this.todosLosMovimientos.set(res.data);
         this.totalPages.set(res.meta.pages);
         this.loading.set(false);
       },
@@ -59,20 +72,14 @@ export class ListaComponent implements OnInit {
 
   setFiltroOrden(v: string) {
     this.filtroOrden.set(this.filtroOrden() === v ? '' : v);
-    this.currentPage.set(1);
-    this.cargar();
   }
 
   setFiltroTipo(v: string) {
     this.filtroTipo.set(this.filtroTipo() === v ? '' : v);
-    this.currentPage.set(1);
-    this.cargar();
   }
 
   onBusqueda(v: string) {
     this.busqueda.set(v);
-    this.currentPage.set(1);
-    this.cargar();
   }
 
   onDeleted(id: number) {
