@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'movimientos', pathMatch: 'full' },
+  { path: '', redirectTo: '/movimientos', pathMatch: 'full' },
   {
     path: 'movimientos',
     loadComponent: () => import('./features/lista/lista').then(m => m.ListaComponent),
