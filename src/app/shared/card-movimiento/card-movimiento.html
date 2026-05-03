@@ -1,16 +1,16 @@
 <div class="card" [class.expanded]="expanded()" [class.compra]="esCompra" [class.venta]="!esCompra" (click)="toggle()">
   <div class="card-head">
     <div class="simbolo-badge" [class.badge-compra]="esCompra" [class.badge-venta]="!esCompra">
-      {{ movimiento.simbolo }}
+      <img *ngIf="logoUrl" [src]="logoUrl" [alt]="movimiento.simbolo" class="logo-img" (error)="imagenError($event)" />
+      <span class="simbolo-texto">{{ movimiento.simbolo }}</span>
     </div>
     <div class="card-info">
-      <div class="nombre">
-        {{ movimiento.nombre }}
+      <div class="nombre">{{ movimiento.nombre }}</div>
+      <div class="sub">
         <span class="orden-tag" [class.tag-compra]="esCompra" [class.tag-venta]="!esCompra">
           {{ movimiento.orden }}
         </span>
       </div>
-      <div class="sub">{{ tipoLabel }} · {{ fechaFormateada }}</div>
     </div>
     <div class="card-valores">
       <div class="valor-usd">{{ currency.formatUsd(movimiento.valor_usd) }}</div>

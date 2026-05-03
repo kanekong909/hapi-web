@@ -9,6 +9,7 @@ export class MovimientosService {
   private base = `${environment.apiUrl}/movimientos`;
   private statsBase = `${environment.apiUrl}/stats`;
 
+
   constructor(private http: HttpClient) {}
 
   getAll(filtros: FiltrosMovimiento = {}): Observable<PaginatedResponse<Movimiento>> {
@@ -47,4 +48,3 @@ export class MovimientosService {
     return this.http.get<PnLActivo[]>(`${this.statsBase}/pnl`);
   }
 }
-  

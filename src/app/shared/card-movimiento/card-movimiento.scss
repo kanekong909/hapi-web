@@ -135,3 +135,37 @@
     color: #993c1d;
   }
 }
+
+.simbolo-badge {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+  position: relative;
+
+  &.badge-compra { background: #e1f5ee; }
+  &.badge-venta  { background: #faece7; }
+
+  .logo-img {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    border-radius: 4px;
+  }
+
+  .simbolo-texto {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    margin-top: 2px;
+    color: var(--text-muted);
+
+    // Si hay logo, el texto queda debajo como label
+    // Si no hay logo, centrar verticalmente
+  }
+}
