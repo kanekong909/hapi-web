@@ -13,8 +13,10 @@ import { CurrencyService } from '../../core/services/currency';
 export class CardMovimientoComponent {
   @Input({ required: true }) movimiento!: Movimiento;
   @Output() deleted = new EventEmitter<number>();
-    private readonly logosMap: Record<string, string> = {
-    // Acciones
+
+  expanded = signal(false);
+
+  private readonly logosMap: Record<string, string> = {
     AAPL:  'apple.com',
     MSFT:  'microsoft.com',
     GOOGL: 'google.com',
@@ -38,45 +40,28 @@ export class CardMovimientoComponent {
     MA:    'mastercard.com',
     PYPL:  'paypal.com',
     UBER:  'uber.com',
-    LYFT:  'lyft.com',
     SPOT:  'spotify.com',
     SHOP:  'shopify.com',
-    SQ:    'squareup.com',
-    SNAP:  'snap.com',
-    TWTR:  'twitter.com',
-    HOOD:  'robinhood.com',
     AMD:   'amd.com',
     INTC:  'intel.com',
     QCOM:  'qualcomm.com',
     CRM:   'salesforce.com',
     ADBE:  'adobe.com',
-    ZM:    'zoom.us',
     ABNB:  'airbnb.com',
     COIN:  'coinbase.com',
-
-    // ETFs
-    VOO:  'vanguard.com',
-    VTI:  'vanguard.com',
-    SPY:  'ssga.com',
-    QQQ:  'invesco.com',
-    IVV:  'ishares.com',
-    VGT:  'vanguard.com',
-    ARKK: 'ark-funds.com',
-
-    // Cripto
-    BTC:  'bitcoin.org',
-    ETH:  'ethereum.org',
-    BNB:  'binance.com',
-    SOL:  'solana.com',
-    ADA:  'cardano.org',
-    XRP:  'ripple.com',
-    DOGE: 'dogecoin.com',
-    DOT:  'polkadot.network',
-    AVAX: 'avax.network',
-    MATIC:'polygon.technology',
+    VOO:   'vanguard.com',
+    VTI:   'vanguard.com',
+    SPY:   'ssga.com',
+    QQQ:   'invesco.com',
+    IVV:   'ishares.com',
+    ARKK:  'ark-funds.com',
+    BTC:   'bitcoin.org',
+    ETH:   'ethereum.org',
+    BNB:   'binance.com',
+    SOL:   'solana.com',
+    XRP:   'ripple.com',
+    DOGE:  'dogecoin.com',
   };
-
-  expanded = signal(false);
 
   constructor(private router: Router, public currency: CurrencyService) {}
 
@@ -94,6 +79,15 @@ export class CardMovimientoComponent {
     }
   }
 
+  get logoUrl(): string {
+    const dominio = this.logosMap[this.movimiento.simbolo.toUpperCase()];
+    return dominio ? `https://logo.clearbit.com/${dominio}` : '';
+  }
+
+  imagenError(event: Event) {
+    (event.target as HTMLImageElement).style.display = 'none';
+  }
+
   get esCompra(): boolean { return this.movimiento.orden === 'COMPRA'; }
 
   get tipoLabel(): string {
@@ -103,22 +97,8 @@ export class CardMovimientoComponent {
 
   get fechaFormateada(): string {
     const [year, month, day] = this.movimiento.fecha.split('T')[0].split('-').map(Number);
-    const fecha = new Date(year, month - 1, day).toLocaleDateString('es-CO', {
+    return new Date(year, month - 1, day).toLocaleDateString('es-CO', {
       day: '2-digit', month: 'short', year: 'numeric'
     });
-    const hora = this.movimiento.hora
-      ? this.movimiento.hora.substring(0, 5)  // "HH:MM"
-      : '';
-    return hora ? `${fecha} · ${hora}` : fecha;
-  }
-
-    get logoUrl(): string {
-    const dominio = this.logosMap[this.movimiento.simbolo.toUpperCase()];
-    if (dominio) return `https://logo.clearbit.com/${dominio}`;
-    return '';
-  }
-
-  imagenError(event: Event) {
-    (event.target as HTMLImageElement).style.display = 'none';
   }
 }
